@@ -110,6 +110,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="scroll-smooth">
+      <meta name="google-site-verification" content="9D8SZV7sxzqoNObLLEvyouk3ij8FajnO-qNwGoA_5yU" />
       <body className={`${inter.className} antialiased bg-white text-slate-900`}>
         {children}
       </body>
