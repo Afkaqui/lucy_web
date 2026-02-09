@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.jpg', // Tienes que crear esta imagen (ver nota abajo)
+        url: '/logo_metadatos.png', // Tienes que crear esta imagen (ver nota abajo)
         width: 1200,
         height: 630,
         alt: 'LucyScan - Interfaz de análisis dermatológico con IA',
