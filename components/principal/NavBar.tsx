@@ -2,14 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image'; // <--- Importamos componente de imagen
 import { usePathname } from 'next/navigation';
-import { Scan, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react'; // Quitamos 'Scan' porque ya no se usa
+
+// Tu imagen importada
+import logo_lucy from '@/src/images/icon.png';
 
 const navLinks = [
   { name: 'Inicio', href: '/' },
   { name: 'Cómo funciona', href: '/#funciona' },
   { name: 'Privacidad', href: '/privacidad' },
-  { name: 'Nosotros', href: '/nosotros' }, // Agregué este para que aparezca en tu menú
+  { name: 'Nosotros', href: '/nosotros' },
 ];
 
 export const NavBar = () => {
@@ -17,7 +21,6 @@ export const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
-  // Detectamos si estamos en la página de inicio
   const isHome = pathname === '/';
 
   useEffect(() => {
@@ -26,15 +29,11 @@ export const NavBar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lógica de colores según el estado:
-  // Solo aplicamos el estilo "Transparente/Texto Blanco" si estamos en el HOME, arriba del todo y el menú móvil está cerrado.
-  // En cualquier otra página (como Privacidad), usamos el estilo "Texto Oscuro" por defecto.
   const isTransparent = isHome && !scrolled && !isOpen;
   
   const textColor = isTransparent ? 'text-white' : 'text-slate-800';
   const logoColor = isTransparent ? 'text-white' : 'text-slate-900';
   const hoverColor = isTransparent ? 'hover:text-emerald-300' : 'hover:text-emerald-600';
-  // El botón cambia de blanco a oscuro según el fondo
   const buttonBg = isTransparent ? 'bg-white text-slate-900' : 'bg-slate-900 text-white';
 
   return (
@@ -42,16 +41,25 @@ export const NavBar = () => {
       scrolled 
         ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' 
         : isHome 
-          ? 'bg-transparent py-5' // En Home arriba: Transparente
-          : 'bg-white/95 backdrop-blur-md shadow-sm py-3' // En otras páginas arriba: Fondo Blanco (para que se vea siempre)
+          ? 'bg-transparent py-5' 
+          : 'bg-white/95 backdrop-blur-md shadow-sm py-3' 
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         
         {/* LOGO */}
         <Link href="/" className={`flex items-center gap-2 group transition-colors ${logoColor}`}>
-          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white transition-transform group-hover:scale-110 shadow-lg shadow-emerald-500/30">
-            <Scan size={18} />
+          
+          {/* AQUI ESTA EL CAMBIO: Imagen en lugar del icono verde */}
+          <div className="relative w-8 h-8 transition-transform group-hover:scale-110">
+            <Image
+              src={logo_lucy}
+              alt="Logo LucyScan"
+              fill // Esto hace que la imagen llene el contenedor w-8 h-8
+              className="object-contain" // Asegura que la imagen no se deforme
+              priority // Carga la imagen rápido ya que es el logo
+            />
           </div>
+
           <span className="font-bold text-xl tracking-tight">LucyScan</span>
         </Link>
 
@@ -71,6 +79,7 @@ export const NavBar = () => {
           
           <Link 
             href="https://play.google.com/store/apps/dev?id=7276562754339194713" 
+            target="_blank" // Agregué target blank para que abra en nueva pestaña
             className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${buttonBg} hover:opacity-90`}
           >
             Iniciar App
@@ -103,7 +112,8 @@ export const NavBar = () => {
             </Link>
           ))}
           <Link 
-            href="https://play.google.com/store/apps/dev?id=7276562754339194713" 
+            href="https://play.google.com/store/apps/dev?id=7276562754339194713"
+            target="_blank"
             onClick={() => setIsOpen(false)}
             className="w-full bg-emerald-600 text-white text-center py-3.5 rounded-xl font-bold shadow-lg shadow-emerald-600/20 active:scale-95 transition-transform mt-4"
           >
