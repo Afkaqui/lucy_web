@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Scan } from 'lucide-react';
-import Fondo from '@/src/images/Gemini_Generated_Image_ma770dma770dma77.png';
+import Fondo from '@/src/images/001Fondo_principal.png';
 
 export const Hero = () => {
   return (
@@ -55,7 +55,7 @@ export const Hero = () => {
             </Link>
             
             <Link 
-              href="#funciona" 
+              href="https://play.google.com/store/apps/dev?id=7276562754339194713" 
               className="w-full sm:w-auto min-w-[200px] bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/20 font-semibold py-4 px-8 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
             >
               Ver Demo <ArrowRight size={18} />
