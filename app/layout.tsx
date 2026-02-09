@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/logo_metadatos.png', // Tienes que crear esta imagen (ver nota abajo)
+        url: 'https://i.ibb.co/sdMyPzR7/logo-metadatos.png', // Tienes que crear esta imagen (ver nota abajo)
         width: 1200,
         height: 630,
         alt: 'LucyScan - Interfaz de análisis dermatológico con IA',
