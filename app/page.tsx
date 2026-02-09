@@ -1,9 +1,14 @@
-import { NavBar } from '@/components/NavBar';
+import { NavBar } from '@/components/principal/NavBar';
 import { Hero } from '@/components/principal/Hero';
 import { HowItWorks} from '@/components/principal/HowItWorks';
+import { Footer } from '@/components/principal/Footer';
+import { Partners } from '@/components/principal/Partners';
+import {Recognitions} from '@/components/principal/Recognitions';
+import { NewsCarousel } from '@/components/principal/NewCarrusel';
+
 
 import Image from 'next/image';
-import { Scan, Activity, ShieldCheck } from 'lucide-react';
+import { Scan, Activity, ShieldCheck, Import } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -13,20 +18,10 @@ export default function Home() {
       {/* 1. SECCIÓN HERO (Full Screen) */}
       <Hero />
       <HowItWorks />
+      <Partners />
+      <NewsCarousel />
       
-
-      {/* FOOTER */}
-      <footer className="bg-white border-t border-slate-100 py-12 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-slate-400 text-sm text-center md:text-left">
-            © {new Date().getFullYear()} LucyScan. Herramienta de apoyo, no sustituye al médico.
-          </p>
-          <div className="flex gap-6 text-slate-400">
-            <a href="#" className="hover:text-emerald-600 transition">Términos</a>
-            <a href="#" className="hover:text-emerald-600 transition">Privacidad</a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </main>
   );
