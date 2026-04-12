@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image'; // <--- Importamos componente de imagen
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react'; // Quitamos 'Scan' porque ya no se usa
+import { Menu, X, LogOut } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
 
 // Tu imagen importada
 import logo_lucy from '@/src/images/icon.png';
@@ -20,6 +21,7 @@ export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   const isHome = pathname === '/';
 
@@ -77,13 +79,42 @@ export const NavBar = () => {
             </Link>
           ))}
           
-          <Link 
-            href="https://play.google.com/store/apps/dev?id=7276562754339194713" 
-            target="_blank" // Agregué target blank para que abra en nueva pestaña
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${buttonBg} hover:opacity-90`}
-          >
-            Iniciar App
-          </Link>
+          {session ? (
+            <div className="flex items-center gap-3">
+              <Link
+                href="/analizar"
+                className={`text-sm font-medium transition-colors ${textColor} ${hoverColor} ${
+                  pathname === '/analizar' ? 'font-bold underline underline-offset-4 decoration-emerald-400' : ''
+                }`}
+              >
+                Analizar
+              </Link>
+              <Link
+                href="/historial"
+                className={`text-sm font-medium transition-colors ${textColor} ${hoverColor} ${
+                  pathname === '/historial' ? 'font-bold underline underline-offset-4 decoration-emerald-400' : ''
+                }`}
+              >
+                Historial
+              </Link>
+              <span className={`text-sm font-medium ${textColor}`}>
+                {session.user.name?.split(' ')[0]}
+              </span>
+              <button
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 ${buttonBg} hover:opacity-90`}
+              >
+                <LogOut size={14} /> Salir
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${buttonBg} hover:opacity-90`}
+            >
+              Iniciar Sesión
+            </Link>
+          )}
         </div>
 
         {/* BOTÓN HAMBURGUESA (Móvil) */}
@@ -111,14 +142,38 @@ export const NavBar = () => {
               {link.name}
             </Link>
           ))}
-          <Link 
-            href="https://play.google.com/store/apps/dev?id=7276562754339194713"
-            target="_blank"
-            onClick={() => setIsOpen(false)}
-            className="w-full bg-emerald-600 text-white text-center py-3.5 rounded-xl font-bold shadow-lg shadow-emerald-600/20 active:scale-95 transition-transform mt-4"
-          >
-            Iniciar Análisis Ahora
-          </Link>
+          {session ? (
+            <>
+              <Link
+                href="/analizar"
+                onClick={() => setIsOpen(false)}
+                className="text-lg font-medium text-emerald-600 hover:text-emerald-700 border-b border-slate-50 pb-2"
+              >
+                Analizar
+              </Link>
+              <Link
+                href="/historial"
+                onClick={() => setIsOpen(false)}
+                className="text-lg font-medium text-emerald-600 hover:text-emerald-700 border-b border-slate-50 pb-2"
+              >
+                Historial
+              </Link>
+              <button
+                onClick={() => { setIsOpen(false); signOut({ callbackUrl: '/' }); }}
+                className="w-full bg-slate-200 text-slate-700 text-center py-3.5 rounded-xl font-bold active:scale-95 transition-transform mt-4 flex items-center justify-center gap-2"
+              >
+                <LogOut size={16} /> Cerrar Sesión
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              className="w-full bg-emerald-600 text-white text-center py-3.5 rounded-xl font-bold shadow-lg shadow-emerald-600/20 active:scale-95 transition-transform mt-4 block"
+            >
+              Iniciar Sesión
+            </Link>
+          )}
         </div>
       </div>
     </nav>

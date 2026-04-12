@@ -6,7 +6,7 @@ import { NavBar } from '@/components/principal/NavBar';
 import { Footer } from '@/components/principal/Footer';
 import {
   Upload, X, CheckCircle, AlertTriangle, ChevronRight,
-  Activity, Lock, Key, Shield, Info, BarChart3, RefreshCw,
+  Activity, Shield, Info, BarChart3, RefreshCw,
 } from 'lucide-react';
 import {
   analyzeImage, checkHealth, getFriendlyLabel, getClassType, getRiskMessage,
@@ -24,13 +24,7 @@ const RISK_COLORS = {
 const RISK_LABEL_ES: Record<string, string> = { high: 'Alto', medium: 'Medio', low: 'Bajo' };
 
 export default function AnalizarPage() {
-  const DEMO_TOKEN = "LUCY2026";
-
   // --- Estados ---
-  const [isLocked, setIsLocked] = useState(true);
-  const [tokenInput, setTokenInput] = useState("");
-  const [tokenError, setTokenError] = useState(false);
-
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -44,12 +38,10 @@ export default function AnalizarPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const progressInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // --- Health check al desbloquear ---
+  // --- Health check al cargar ---
   useEffect(() => {
-    if (!isLocked) {
-      checkHealth().then(setApiOnline);
-    }
-  }, [isLocked]);
+    checkHealth().then(setApiOnline);
+  }, []);
 
   // --- Cleanup ---
   useEffect(() => {
@@ -57,17 +49,6 @@ export default function AnalizarPage() {
       if (progressInterval.current) clearInterval(progressInterval.current);
     };
   }, []);
-
-  // --- Token gate ---
-  const handleUnlock = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (tokenInput.trim().toUpperCase() === DEMO_TOKEN) {
-      setIsLocked(false);
-      setTokenError(false);
-    } else {
-      setTokenError(true);
-    }
-  };
 
   // --- Manejo de archivos ---
   const processFile = (file: File) => {
@@ -159,56 +140,6 @@ export default function AnalizarPage() {
     <main className="min-h-screen bg-slate-50 font-sans text-slate-900 pt-20 relative">
       <NavBar />
 
-      {/* ===== MODAL TOKEN GATE ===== */}
-      {isLocked && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-xl">
-          <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-md w-full mx-4 border border-white/20">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6 text-slate-500">
-                <Lock size={32} />
-              </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Acceso Restringido</h2>
-              <p className="text-slate-500 mb-6 text-sm">
-                Esta es una versión demo de LucyScan. Ingresa tu token de acceso para continuar.
-              </p>
-              <form onSubmit={handleUnlock} className="w-full">
-                <div className="relative mb-4">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Key size={18} className="text-slate-400" />
-                  </div>
-                  <input
-                    type="password"
-                    value={tokenInput}
-                    onChange={(e) => setTokenInput(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 rounded-xl border outline-none transition-all ${
-                      tokenError
-                        ? 'border-red-500 bg-red-50 text-red-900 placeholder-red-300 focus:ring-2 focus:ring-red-200'
-                        : 'border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                    }`}
-                    placeholder="Token de acceso"
-                    autoFocus
-                  />
-                </div>
-                {tokenError && (
-                  <p className="text-red-500 text-xs font-bold mb-4 animate-pulse">
-                    Token incorrecto. Inténtalo de nuevo.
-                  </p>
-                )}
-                <button
-                  type="submit"
-                  className="w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl hover:bg-emerald-600 transition-all duration-300 shadow-lg hover:shadow-emerald-500/30 active:scale-95"
-                >
-                  Desbloquear Demo
-                </button>
-              </form>
-              <p className="mt-6 text-xs text-slate-400">
-                Solicita acceso en <span className="font-mono text-slate-500">lucyia364@gmail.com</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* ===== CONTENIDO PRINCIPAL ===== */}
       <section className="max-w-5xl mx-auto px-4 py-12 min-h-[80vh] flex flex-col justify-center">
 
@@ -242,7 +173,7 @@ export default function AnalizarPage() {
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
-            onClick={() => !isLocked && fileInputRef.current?.click()}
+            onClick={() => fileInputRef.current?.click()}
           >
             <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
 
