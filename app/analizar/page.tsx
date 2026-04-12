@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import {
   analyzeImage, checkHealth, getFriendlyLabel, getClassType, getRiskMessage,
+  GateRejectionError,
   type AnalysisResult,
 } from '@/lib/lucyscan-api';
 
@@ -33,7 +34,7 @@ export default function AnalizarPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'analyzing' | 'result' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'analyzing' | 'result' | 'error' | 'gate_rejected'>('idle');
   const [progress, setProgress] = useState(0);
   const [analysisStep, setAnalysisStep] = useState('');
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -127,9 +128,14 @@ export default function AnalizarPage() {
       setTimeout(() => setStatus('result'), 600);
     } catch (err: unknown) {
       if (progressInterval.current) clearInterval(progressInterval.current);
-      const message = err instanceof Error ? err.message : 'Error desconocido';
-      setErrorMsg(message);
-      setStatus('error');
+      if (err instanceof GateRejectionError) {
+        setErrorMsg(err.message);
+        setStatus('gate_rejected');
+      } else {
+        const message = err instanceof Error ? err.message : 'Error desconocido';
+        setErrorMsg(message);
+        setStatus('error');
+      }
     }
   };
 
@@ -321,6 +327,28 @@ export default function AnalizarPage() {
                 Nueva imagen
               </button>
             </div>
+          </div>
+        )}
+
+        {/* ===== 3b. GATE REJECTION ===== */}
+        {status === 'gate_rejected' && (
+          <div className="max-w-xl mx-auto w-full bg-white p-8 rounded-3xl shadow-lg border border-amber-100 text-center">
+            <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertTriangle size={32} className="text-amber-500" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Imagen no válida</h3>
+            <p className="text-slate-500 mb-2 text-sm">
+              Esta imagen no parece ser una fotografía de piel o lesión cutánea.
+            </p>
+            <p className="text-slate-400 mb-6 text-xs">
+              Por favor sube una foto clara de la lesión que deseas analizar.
+            </p>
+            <button
+              onClick={resetAnalysis}
+              className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors flex items-center gap-2 mx-auto"
+            >
+              <RefreshCw size={16} /> Subir otra imagen
+            </button>
           </div>
         )}
 

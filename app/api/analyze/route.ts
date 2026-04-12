@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       return NextResponse.json(
-        { detail: data.detail ?? 'Error en la API de IA' },
+        { detail: data.detail ?? 'Error en la API de IA', ...('gate_score' in data && { gate_score: data.gate_score }) },
         { status: response.status },
       );
     }

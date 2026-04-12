@@ -47,6 +47,15 @@ export function getRiskMessage(level: string): string {
   return RISK_MESSAGES[level] ?? '';
 }
 
+export class GateRejectionError extends Error {
+  gate_score: number;
+  constructor(detail: string, gate_score: number) {
+    super(detail);
+    this.name = 'GateRejectionError';
+    this.gate_score = gate_score;
+  }
+}
+
 export async function analyzeImage(file: File): Promise<AnalysisResult> {
   const formData = new FormData();
   formData.append('file', file);
@@ -55,6 +64,14 @@ export async function analyzeImage(file: File): Promise<AnalysisResult> {
     method: 'POST',
     body: formData,
   });
+
+  if (response.status === 422) {
+    const data = await response.json().catch(() => ({ detail: 'Imagen no válida', gate_score: 0 }));
+    throw new GateRejectionError(
+      data.detail ?? 'La imagen no parece ser una fotografía de piel.',
+      data.gate_score ?? 0,
+    );
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Error de conexión con el servidor' }));
