@@ -30,6 +30,7 @@ export default function LoginPage() {
 
     if (result?.error) {
       setError('Correo o contraseña incorrectos.');
+      console.log('Error de inicio de sesión:', result.error);
     } else {
       router.push('/analizar');
     }
