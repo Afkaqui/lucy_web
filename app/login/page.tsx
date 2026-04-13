@@ -1,15 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { NavBar } from '@/components/principal/NavBar';
 import { Footer } from '@/components/principal/Footer';
 import { Mail, Lock, LogIn } from 'lucide-react';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,22 +18,25 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: '/analizar',
+      });
 
-    // Verify session was actually created
-    const session = await getSession();
+      if (result?.error) {
+        setLoading(false);
+        setError('Correo o contraseña incorrectos.');
+        return;
+      }
 
-    setLoading(false);
-
-    if (!session?.user) {
-      setError('Correo o contraseña incorrectos.');
-    } else {
-      router.push('/analizar');
-      router.refresh();
+      // Login OK — redirect manually
+      window.location.href = '/analizar';
+    } catch {
+      setLoading(false);
+      setError('Error al iniciar sesión. Intenta de nuevo.');
     }
   };
 
