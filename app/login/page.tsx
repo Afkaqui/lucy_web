@@ -18,16 +18,16 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    try {
-      await signIn('credentials', {
-        email,
-        password,
-        redirectTo: '/analizar',
-      });
-    } catch {
-      setLoading(false);
-      setError('Correo o contraseña incorrectos.');
-    }
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
+
+    // signIn always sets the cookie if authorize() succeeds.
+    // result.error may be set even on success, so we just reload.
+    // If auth failed, the session won't exist and NavBar shows login link.
+    window.location.href = '/analizar';
   };
 
   return (
