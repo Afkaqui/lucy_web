@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { NavBar } from '@/components/principal/NavBar';
@@ -20,19 +20,22 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    const result = await signIn('credentials', {
+    await signIn('credentials', {
       email,
       password,
       redirect: false,
     });
 
+    // Verify session was actually created
+    const session = await getSession();
+
     setLoading(false);
 
-    if (result?.error) {
+    if (!session?.user) {
       setError('Correo o contraseña incorrectos.');
-      console.log('Error de inicio de sesión:', result.error);
     } else {
       router.push('/analizar');
+      router.refresh();
     }
   };
 
