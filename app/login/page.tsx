@@ -19,24 +19,14 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const result = await signIn('credentials', {
+      await signIn('credentials', {
         email,
         password,
-        redirect: false,
-        callbackUrl: '/analizar',
+        redirectTo: '/analizar',
       });
-
-      if (result?.error) {
-        setLoading(false);
-        setError('Correo o contraseña incorrectos.');
-        return;
-      }
-
-      // Login OK — redirect manually
-      window.location.href = '/analizar';
     } catch {
       setLoading(false);
-      setError('Error al iniciar sesión. Intenta de nuevo.');
+      setError('Correo o contraseña incorrectos.');
     }
   };
 
