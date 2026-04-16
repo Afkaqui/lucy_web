@@ -7,9 +7,18 @@ const PROTECTED_API = ['/api/analyze', '/api/scans'];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // In production behind nginx, requests arrive as HTTP but cookies
+  // were set with __Secure- prefix because AUTH_URL is https://.
+  // We must tell getToken to look for the secure cookie name.
+  const useSecureCookies =
+    process.env.AUTH_URL?.startsWith('https://') ||
+    process.env.NEXTAUTH_URL?.startsWith('https://') ||
+    false;
+
   const token = await getToken({
     req: request,
     secret: process.env.AUTH_SECRET,
+    secureCookie: useSecureCookies,
   });
 
   const isLoggedIn = !!token;

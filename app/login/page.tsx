@@ -18,16 +18,26 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
 
-    // signIn always sets the cookie if authorize() succeeds.
-    // result.error may be set even on success, so we just reload.
-    // If auth failed, the session won't exist and NavBar shows login link.
-    window.location.href = '/analizar';
+      if (result?.error) {
+        setError('Correo o contraseña incorrectos');
+        setLoading(false);
+        return;
+      }
+
+      // Auth succeeded — navigate to /analizar
+      window.location.href = '/analizar';
+    } catch {
+      // Auth.js v5 may throw even on successful credentials login.
+      // Try navigating anyway — if session was set, middleware will allow it.
+      window.location.href = '/analizar';
+    }
   };
 
   return (
