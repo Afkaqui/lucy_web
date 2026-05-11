@@ -8,10 +8,10 @@ services:
     environment:
       - NODE_ENV=production
       - HOSTNAME=0.0.0.0
-      - DATABASE_URL=postgresql://admin:K4qu1_Pr0d_2026@161.132.54.226:5432/lucyscan_db
-      - AUTH_SECRET=lucyscan-auth-secret-change-in-production-2026
-      - AUTH_URL=https://lucyscan.com
+      - DATABASE_URL=${DATABASE_URL}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - AUTH_URL=${AUTH_URL}
       - AUTH_TRUST_HOST=true
-      - NEXTAUTH_URL=https://lucyscan.com
-      - AI_API_URL=http://161.132.54.226:8100
-      - API_SECRET=lucyscan-api-secret-change-in-production-2026
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - AI_API_URL=${AI_API_URL}
+      - API_SECRET=${API_SECRET}
