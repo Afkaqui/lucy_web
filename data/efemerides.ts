@@ -36,7 +36,7 @@ Kevin, gracias por tu energía, tu compromiso y por ser parte de este sueño que
 
 Con cariño, el equipo LucyScan 💚`,
     fecha: '2026-05-12',
-    foto: null,
+    foto: '/efemerides/kevin.jpeg',
     iniciales: 'KC',
     destacada: true,
   },
