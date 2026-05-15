@@ -15,3 +15,10 @@ services:
       - NEXTAUTH_URL=${NEXTAUTH_URL}
       - AI_API_URL=${AI_API_URL}
       - API_SECRET=${API_SECRET}
+    networks:
+      - default
+      - postgresql_default
+
+networks:
+  postgresql_default:
+    external: true
