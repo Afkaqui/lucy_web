@@ -26,16 +26,19 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError('Correo o contraseña incorrectos');
+        if (result.code === 'service_unavailable') {
+          setError('Servicio temporalmente no disponible. Intenta de nuevo en unos minutos.');
+        } else {
+          setError('Correo o contraseña incorrectos.');
+        }
         setLoading(false);
         return;
       }
 
-      // Auth succeeded — navigate to /analizar
       window.location.href = '/analizar';
     } catch {
-      // Auth.js v5 may throw even on successful credentials login.
-      // Try navigating anyway — if session was set, middleware will allow it.
+      // Auth.js v5 puede lanzar excepción incluso en login exitoso.
+      // Navegamos de todas formas — el middleware decidirá.
       window.location.href = '/analizar';
     }
   };
