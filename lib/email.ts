@@ -30,8 +30,13 @@ export async function sendPasswordResetEmail({
         <table width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);overflow:hidden;">
           <!-- Header -->
           <tr>
-            <td style="background:#0f172a;padding:32px 40px;text-align:center;">
-              <span style="font-size:24px;font-weight:800;color:#10b981;letter-spacing:-0.5px;">Lucy</span><span style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">Scan</span>
+            <td style="background:#0f172a;padding:28px 40px;text-align:center;">
+              <img src="https://lucyscan.com/logo.png"
+                   alt="LucyScan"
+                   width="48"
+                   height="48"
+                   style="display:inline-block;vertical-align:middle;border-radius:10px;margin-right:12px;" />
+              <span style="font-size:24px;font-weight:800;color:#10b981;letter-spacing:-0.5px;vertical-align:middle;">Lucy</span><span style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;vertical-align:middle;">Scan</span>
             </td>
           </tr>
           <!-- Body -->
