@@ -2,13 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, LogOut } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
-
-// Tu imagen importada
-import logo_lucy from '@/src/images/icon.png';
 
 const navLinks = [
   { name: 'Inicio', href: '/' },
@@ -51,16 +47,14 @@ export const NavBar = () => {
         {/* LOGO */}
         <Link href="/" className={`flex items-center gap-2 group transition-colors ${logoColor}`}>
           
-          {/* AQUI ESTA EL CAMBIO: Imagen en lugar del icono verde */}
-          <div className="relative w-8 h-8 transition-transform group-hover:scale-110">
-            <Image
-              src={logo_lucy}
-              alt="Logo LucyScan"
-              fill // Esto hace que la imagen llene el contenedor w-8 h-8
-              className="object-contain" // Asegura que la imagen no se deforme
-              priority // Carga la imagen rápido ya que es el logo
-            />
-          </div>
+          {/* SVG vectorial — nítido en cualquier resolución */}
+          <img
+            src="/logo.svg"
+            alt="Logo LucyScan"
+            width={32}
+            height={32}
+            className="transition-transform group-hover:scale-110"
+          />
 
           <span className="font-bold text-xl tracking-tight">LucyScan</span>
         </Link>
