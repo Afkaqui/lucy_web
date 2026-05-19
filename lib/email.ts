@@ -31,11 +31,11 @@ export async function sendPasswordResetEmail({
           <!-- Header -->
           <tr>
             <td style="background:#0f172a;padding:28px 40px;text-align:center;">
-              <img src="https://lucyscan.com/logo.png"
+              <img src="https://lucyscan.com/logo-email.png"
                    alt="LucyScan"
-                   width="48"
-                   height="48"
-                   style="display:inline-block;vertical-align:middle;border-radius:10px;margin-right:12px;" />
+                   width="52"
+                   height="52"
+                   style="display:inline-block;vertical-align:middle;margin-right:10px;" />
               <span style="font-size:24px;font-weight:800;color:#10b981;letter-spacing:-0.5px;vertical-align:middle;">Lucy</span><span style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;vertical-align:middle;">Scan</span>
             </td>
           </tr>
