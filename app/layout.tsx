@@ -44,6 +44,15 @@ export const metadata: Metadata = {
   // URL Base para resolver rutas relativas
   metadataBase: new URL(BASE_URL),
 
+  // URL canónica — evita contenido duplicado
+  alternates: {
+    canonical: '/',
+  },
+
+  // Categoría e identidad de la aplicación
+  applicationName: 'LucyScan',
+  category: 'health',
+
   // Configuración Open Graph (Cómo se ve en Facebook, LinkedIn, WhatsApp)
   openGraph: {
     title: 'LucyScan - Tu aliado en la prevención del cáncer de piel',
@@ -54,10 +63,10 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://i.ibb.co/sdMyPzR7/logo-metadatos.png', // Tienes que crear esta imagen (ver nota abajo)
+        url: '/og-image.png', // Imagen local en el dominio (1200x630)
         width: 1200,
         height: 630,
-        alt: 'LucyScan - Interfaz de análisis dermatológico con IA',
+        alt: 'LucyScan - Análisis dermatológico con IA para detección de cáncer de piel',
       },
     ],
   },
@@ -67,7 +76,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'LucyScan | IA Dermatológica',
     description: 'Pre-diagnóstico de piel rápido y seguro. Escanea, analiza y previene.',
-    images: ['/og-image.jpg'], // Reusa la misma imagen
+    images: ['/og-image.png'], // Misma imagen local que Open Graph
   },
 
   // Iconos del navegador
@@ -92,16 +101,53 @@ export const metadata: Metadata = {
 
   // Verificación de propiedad (Google Search Console)
   verification: {
-    google: 'TU_CODIGO_DE_VERIFICACION_GOOGLE', // <--- PENDIENTE: Reemplazar cuando lo tengas
+    google: '9D8SZV7sxzqoNObLLEvyouk3ij8FajnO-qNwGoA_5yU',
   },
 };
 
 // Configuración del Viewport (Zoom y escala en móviles)
+// NOTA: no se limita maximumScale para no bloquear el zoom (accesibilidad / SEO)
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  themeColor: '#ffffff', // Color de la barra de navegación en Android Chrome
+  themeColor: '#0d1b2d', // Navy de marca — barra de navegación en Android Chrome
+};
+
+// Datos estructurados (JSON-LD) para Google rich results
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'MedicalOrganization',
+      '@id': `${BASE_URL}/#organization`,
+      name: 'LucyScan',
+      url: BASE_URL,
+      logo: `${BASE_URL}/brand/logo-512.png`,
+      image: `${BASE_URL}/og-image.png`,
+      description:
+        'Plataforma peruana de pre-diagnóstico dermatológico con inteligencia artificial para la detección temprana de cáncer de piel.',
+      areaServed: { '@type': 'Country', name: 'Perú' },
+      knowsAbout: [
+        'Cáncer de piel',
+        'Melanoma',
+        'Dermatología',
+        'Detección temprana de lesiones cutáneas',
+        'Inteligencia artificial en salud',
+      ],
+      sameAs: [
+        'https://play.google.com/store/apps/dev?id=7276562754339194713',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${BASE_URL}/#website`,
+      url: BASE_URL,
+      name: 'LucyScan',
+      description: 'Pre-diagnóstico dermatológico con IA — detección temprana de cáncer de piel.',
+      publisher: { '@id': `${BASE_URL}/#organization` },
+      inLanguage: 'es-PE',
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -110,9 +156,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="scroll-smooth">
-      <meta name="google-site-verification" content="9D8SZV7sxzqoNObLLEvyouk3ij8FajnO-qNwGoA_5yU" />
+    <html lang="es-PE" className="scroll-smooth">
       <body className={`${inter.className} antialiased bg-white text-slate-900`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
