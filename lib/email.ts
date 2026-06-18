@@ -4,6 +4,10 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM_ADDRESS = 'LucyScan <noreply@lucyscan.com>';
 
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 export async function sendPasswordResetEmail({
   to,
   resetUrl,
@@ -13,7 +17,7 @@ export async function sendPasswordResetEmail({
   resetUrl: string;
   userName?: string | null;
 }) {
-  const name = userName ?? 'Usuario';
+  const name = escapeHtml(userName ?? 'Usuario');
 
   const html = `
 <!DOCTYPE html>

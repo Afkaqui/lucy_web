@@ -54,7 +54,10 @@ export default function AnalizarPage() {
   const processFile = (file: File) => {
     if (!file.type.startsWith('image/')) return;
     setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    setImagePreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return URL.createObjectURL(file);
+    });
     setStatus('idle');
     setResult(null);
     setErrorMsg('');
@@ -122,7 +125,10 @@ export default function AnalizarPage() {
 
   const resetAnalysis = () => {
     setImageFile(null);
-    setImagePreview(null);
+    setImagePreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
     setStatus('idle');
     setResult(null);
     setProgress(0);

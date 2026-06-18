@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         confidence: data.confidence,
         riskLevel: data.risk_level,
         probabilities: data.probabilities,
-        modelUsed: data.model_used ?? 'phone',
+        modelUsed: data.model ?? 'phone',
         gateScore: data.gate_score ?? null,
         source: 'web',
         bodyLocation: bodyLocation,

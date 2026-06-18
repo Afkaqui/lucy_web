@@ -111,6 +111,14 @@ model PasswordResetToken {
   @@map("password_reset_tokens")
 }
 
+model SiteStats {
+  id        Int      @id @default(1)
+  pageViews Int      @default(0) @map("page_views")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("site_stats")
+}
+
 model ApiToken {
   id         String    @id @default(cuid())
   userId     String    @map("user_id")
